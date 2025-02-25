@@ -1,0 +1,30 @@
+{
+    "name": "franky5831/codeigniter4-user-library",
+    "description": "Codeigniter4 User Mangement Library",
+    "type": "package",
+    "version": "0.0.1",
+    "autoload": {
+        "psr-4": {
+            "Franky5831\\CodeIgniter4UserLibrary\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Francesco Ciannavei",
+            "email": "francesco@ciannavei.dev",
+            "homepage": "https://www.ciannavei.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "codeigniter4/framework": "^4.0",
+        "voku/anti-xss": "^4.1"
+    },
+    "extra": {
+        "codeigniter": {
+            "namespace": "Franky5831\\CodeIgniter4UserLibrary",
+            "views": "Views"
+        }
+    }
+}
