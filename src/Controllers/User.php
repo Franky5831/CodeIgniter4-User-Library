@@ -46,7 +46,7 @@ class User extends Controller
 			// Returns the view from the app's folder, if it doesn't exist, it returns the vendor's view
 			return view('Views/userlib/login-view');
 		} catch (\CodeIgniter\View\Exceptions\ViewException $e) {
-			return view('../../vendor/franky5831/ci4-pckg-userlib/src/Views/login-view');
+			return view('../../vendor/franky5831/codeigniter4-user-library/src/Views/login-view');
 		}
 	}
 
@@ -108,7 +108,7 @@ class User extends Controller
 			// Returns the view from the app's folder, if it doesn't exist, it returns the vendor's view
 			return view('Views/userlib/register-view');
 		} catch (\CodeIgniter\View\Exceptions\ViewException $e) {
-			return view('../../vendor/franky5831/ci4-pckg-userlib/src/Views/register-view');
+			return view('../../vendor/franky5831/codeigniter4-user-library/src/Views/register-view');
 		}
 	}
 

@@ -15,5 +15,5 @@ $cloudflareSiteKey = "";
 	<input type="password" name="password" placeholder="Password">
 	<?=
 	// If you happen to override the login view you should still include the captcha view
-	view('../../vendor/franky5831/ci4-pckg-userlib/src/Views/captcha', array("label" => "Login")) ?>
+	view('../../vendor/franky5831/codeigniter4-user-library/src/Views/captcha', array("label" => "Login")) ?>
 </form>

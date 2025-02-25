@@ -21,5 +21,5 @@ $userExtraAttributes = $config->userExtraAttributes;
 	<?php endforeach; ?>
 	<?=
 	// If you happen to override the register view you should still include the captcha view
-	view('../../vendor/franky5831/ci4-pckg-userlib/src/Views/captcha', array("label" => "Register")) ?>
+	view('../../vendor/franky5831/codeigniter4-user-library/src/Views/captcha', array("label" => "Register")) ?>
 </form>
