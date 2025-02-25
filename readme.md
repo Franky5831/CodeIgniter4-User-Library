@@ -12,22 +12,10 @@ The library will automatically manage the registration and login process, with s
 - [ ] Brute force attacks
 
 
-Please remember that this library is still being developed, some features might not be already available and others might not work at all 😊.
-
-
 ## How to install the library:
-1. Add the following code block to the composer.json file:
-```json
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "git@github.com:franky5831/CI4-PCKG-UserLib.git"
-    }
-],
-```
-Since this is a private repository, you need to add that line to your composer.json file.
-
-2. Run the following command in your terminal:
+Run the following command in your terminal:
 ```bash
-composer require franky5831/ci4-pckg-test
+composer require franky5831/codeigniter4-user-library
 ```
+
+Please remember that this library is still being developed, some features might not be already available and others might not work at all 😊.
