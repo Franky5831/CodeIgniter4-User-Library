@@ -38,4 +38,50 @@ class User extends Model
 		}
 		return $data;
 	}
+
+	public function setPostError(): void
+	{
+		$clientIp = getClientIp();
+		$cache = service('cache');
+
+		$clientIpCacheId = "client_ip_error_" . $clientIp;
+		$clientIpCacheVal = $cache->get($clientIpCacheId);
+		if ($clientIpCacheVal) {
+			$clientIpCacheVal++;
+		} else {
+			$clientIpCacheVal = 1;
+		}
+		$config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
+		$userErrorTimeout = $config->userErrorTimeout;
+		$cache->save($clientIpCacheId, $clientIpCacheVal, $userErrorTimeout);
+	}
+
+	private function getPostError(): int
+	{
+		$clientIp = getClientIp();
+		$cache = service('cache');
+
+		$clientIpCacheId = "client_ip_error_" . $clientIp;
+		$clientIpCacheVal = $cache->get($clientIpCacheId);
+		if (!$clientIpCacheVal) {
+			$clientIpCacheVal = 0;
+		}
+
+		return $clientIpCacheVal;
+	}
+
+	public function getUserCanPost(): bool
+	{
+		$config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
+		$userPostErrorLogger = $config->userPostErrorLogger;
+		if ($userPostErrorLogger) {
+			$maxPostErrors = $config->maxPostErrors;
+			$userCanPost = $this->getPostError() < $maxPostErrors;
+			if (!$userCanPost) {
+				\Config\Services::validation()->setError("user_cant_post", lang('Validation.user_cant_post'));
+			}
+			return $userCanPost;
+		}
+		return true;
+	}
 }

@@ -3,23 +3,35 @@
 namespace Franky5831\CodeIgniter4UserLibrary\Controllers;
 
 use CodeIgniter\Controller;
+use Exception;
 use Franky5831\CodeIgniter4UserLibrary\Models\User as UserModel;
 
 class User extends Controller
 {
+	private $userModel;
+
 	public function __construct()
 	{
 		// Loads the user helper
 		helper('user_helper');
 		// Adds form validation user rules
 		config('Validation')->ruleSets[] = \Franky5831\CodeIgniter4UserLibrary\Validation\ValidationRules::class;
+
+		$this->userModel = new UserModel();
 	}
 
 	public function login(): \CodeIgniter\HTTP\RedirectResponse|string
 	{
+		$config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
+		$userCanLogin = $config->userCanLogin;
+		if (!$userCanLogin) {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+
 		if (isLoggedIn()) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
+
 		$validationRules = [
 			'email' => [
 				'label' => 'Email',
@@ -34,13 +46,16 @@ class User extends Controller
 		$captchaRules = $this->getCaptchaRules();
 		$validationRules = array_merge($validationRules, $captchaRules);
 
-		if ($this->request->getMethod() == "POST" && $this->validate($validationRules)) {
-			$userModel = new userModel();
-			$user = $userModel->where("email", $this->request->getPost("email"))->first();
+		if ($this->request->getMethod() == "POST") {
+			if ($this->userModel->getUserCanPost() && $this->validate($validationRules)) {
+				$user = $this->userModel->where("email", $this->request->getPost("email"))->first();
 
-			$this->setUserMethod($user);
+				$this->setUserMethod($user);
 
-			return redirect()->to("/");
+				return redirect()->to("/");
+			} else {
+				$this->userModel->setPostError();
+			}
 		}
 		try {
 			// Returns the view from the app's folder, if it doesn't exist, it returns the vendor's view
@@ -81,27 +96,29 @@ class User extends Controller
 		$userExtraAttributes = $config->userExtraAttributes;
 		$validationRules = array_merge($validationRules, $captchaRules, $userExtraAttributes);
 
-		if ($this->request->getMethod() == "POST" && $this->validate($validationRules)) {
-			$userModel = new UserModel();
+		if ($this->request->getMethod() == "POST") {
+			if ($this->userModel->getUserCanPost() && $this->validate($validationRules)) {
+				$userData = [
+					'email' => $this->request->getPost('email'),
+					'password' => $this->request->getPost('password'),
+				];
+				foreach ($userExtraAttributes as $attribute => $data) {
+					$attributeValue = $this->request->getPost($attribute);
+					$userData[$attribute] = $attributeValue;
+				}
 
-			$userData = [
-				'email' => $this->request->getPost('email'),
-				'password' => $this->request->getPost('password'),
-			];
-			foreach ($userExtraAttributes as $attribute => $data) {
-				$attributeValue = $this->request->getPost($attribute);
-				$userData[$attribute] = $attributeValue;
+				$this->userModel->save($userData);
+				$session = session();
+
+				$user = $this->userModel->where("email", $this->request->getPost("email"))->first();
+				$this->setUserMethod($user);
+
+				$session->setFlashdata('success', "Registrazione avvenuta con successo");
+
+				return redirect()->to('/');
+			} else {
+				$this->userModel->setPostError();
 			}
-
-			$userModel->save($userData);
-			$session = session();
-
-			$user = $userModel->where("email", $this->request->getPost("email"))->first();
-			$this->setUserMethod($user);
-
-			$session->setFlashdata('success', "Registrazione avvenuta con successo");
-
-			return redirect()->to('/');
 		}
 
 		try {
@@ -135,9 +152,8 @@ class User extends Controller
 					throw new \Exception("The selected captcha type does not exists", 1);
 					break;
 			}
-
-			return $validationRules;
 		}
+		return $validationRules;
 	}
 
 	private function setUserMethod($user): void
