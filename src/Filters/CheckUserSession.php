@@ -15,6 +15,7 @@ class CheckUserSession implements FilterInterface
 	 */
 	public function before(RequestInterface $request, $arguments = null): RedirectResponse|null
 	{
+		$config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
 		// Check if the user is logged in
 		helper('user_helper');
 		if (!isLoggedIn()) {
@@ -22,21 +23,27 @@ class CheckUserSession implements FilterInterface
 		}
 
 		// Checks if the client ip and user agent are the same as the ones stored in the session
+		// If they are not the same then destroy the session and redirect to the login page if not already on the login page
 		$clientIpMatch = session()->client_ip == getClientIp();
 		$clientAgentMatch = session()->user_agent == getUserAgent();
+		$enableMatchIP = $config->sessionHijackingMatchIP;
+		$enableMatchUserAgent = $config->sessionHijackingMatchUserAgent;
 
-		// If they are not the same then destroy the session and redirect to the login page if not already on the login page
-		if ($clientIpMatch && $clientAgentMatch) {
-			return null;
-		}
-		session()->destroy();
+		if (
+			(!$clientIpMatch && $enableMatchIP)
+			|| (!$clientAgentMatch && $enableMatchUserAgent)
+		) {
+			session()->destroy();
 
-		$currentUrl = current_url();
-		$loginUrl = url_to('loginurl');
-		if ($currentUrl == $loginUrl) {
-			return null;
+			$currentUrl = current_url();
+			$loginUrl = url_to('loginurl');
+			if ($currentUrl == $loginUrl) {
+				return null;
+			}
+			return redirect()->to($loginUrl);
 		}
-		return redirect()->to($loginUrl);
+
+		return null;
 	}
 
 	public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): ResponseInterface
