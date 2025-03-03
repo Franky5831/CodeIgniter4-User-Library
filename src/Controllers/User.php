@@ -39,7 +39,7 @@ class User extends Controller
 			],
 			'password' => [
 				'label' => 'Password',
-				'rules' => 'required|validateUser[email,password]',
+				'rules' => 'required|validate_user[email,password]',
 			],
 		];
 

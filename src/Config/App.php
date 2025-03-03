@@ -25,13 +25,11 @@ class App extends \Config\App
 	public bool $setUserLibRoutes = true;
 
 	/*
-	*
 	* Enable Registration
 	*/
 	public bool $userCanRegister = true;
 
 	/*
-	* //! not used
 	* Enable Login
 	*/
 	public bool $userCanLogin = true;

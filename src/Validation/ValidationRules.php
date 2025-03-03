@@ -16,7 +16,7 @@ class ValidationRules
 		$this->antiXss = new AntiXSS();
 	}
 
-	public function validateUser(string $str, string $fields, array $data): bool
+	public function validate_user(string $str, string $fields, array $data): bool
 	{
 		$model = new UserModel();
 		$user = $model->where("email", $data["email"])->first();
@@ -78,7 +78,7 @@ class ValidationRules
 		return (bool) json_decode($curlResult)->success;
 	}
 
-	public function validateXss($str, $fields,): bool
+	public function validate_xss($str, $fields,): bool
 	{
 		$originalValue = $str;
 		$cleanValue = $this->antiXss->xss_clean($str);
