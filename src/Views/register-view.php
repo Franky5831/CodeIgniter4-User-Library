@@ -4,8 +4,7 @@
  * This is just an example.
  * To use your view create Views/userlib/register-view.php
  */
-helper('url');
-helper('form_validation');
+helper(['url', 'form_validation', 'form']);
 $registerUrl = url_to('registerurl');
 $cloudflareSiteKey = "";
 $config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
@@ -13,11 +12,11 @@ $userExtraAttributes = $config->userExtraAttributes;
 ?>
 <?= \Config\Services::validation()->listErrors() ?>
 <form action="<?= $registerUrl ?>" method="post" id="userForm">
-	<input type="email" name="email" placeholder="Email">
+	<input type="email" name="email" value="<?= set_value('email') ?>" placeholder="Email">
 	<input type="password" name="password" placeholder="Password">
 	<input type="password" name="password_confirm" placeholder="Confirm Password">
 	<?php foreach ($userExtraAttributes as $attribute => $data): ?>
-		<input type="<?= $data["type"] ?>" name="<?= $attribute ?>" placeholder="<?= $data["label"] ?>">
+		<input type="<?= $data["type"] ?>" name="<?= $attribute ?>" value="<?= set_value($attribute) ?>" placeholder="<?= $data["label"] ?>">
 	<?php endforeach; ?>
 	<?=
 	// If you happen to override the register view you should still include the captcha view
