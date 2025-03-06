@@ -41,19 +41,23 @@ class User extends Model
 
 	public function setPostError(): void
 	{
-		$clientIp = getClientIp();
-		$cache = service('cache');
-
-		$clientIpCacheId = "client_ip_error_" . $clientIp;
-		$clientIpCacheVal = $cache->get($clientIpCacheId);
-		if ($clientIpCacheVal) {
-			$clientIpCacheVal++;
-		} else {
-			$clientIpCacheVal = 1;
-		}
 		$config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
-		$userErrorTimeout = $config->userErrorTimeout;
-		$cache->save($clientIpCacheId, $clientIpCacheVal, $userErrorTimeout);
+		$userPostErrorLogger = $config->userPostErrorLogger;
+		if ($userPostErrorLogger) {
+			$clientIp = getClientIp();
+			$cache = service('cache');
+
+			$clientIpCacheId = "client_ip_error_" . $clientIp;
+			$clientIpCacheVal = $cache->get($clientIpCacheId);
+			if ($clientIpCacheVal) {
+				$clientIpCacheVal++;
+			} else {
+				$clientIpCacheVal = 1;
+			}
+			$config = config(\Franky5831\CodeIgniter4UserLibrary\Config\App::class);
+			$userErrorTimeout = $config->userErrorTimeout;
+			$cache->save($clientIpCacheId, $clientIpCacheVal, $userErrorTimeout);
+		}
 	}
 
 	private function getPostError(): int
