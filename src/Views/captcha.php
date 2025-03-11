@@ -27,10 +27,16 @@ if ($config->userLibCaptcha):
                     document.getElementById('userForm').submit();
                 }
             </script>
+        <?php
+            break;
+        default:
+        ?>
+            <button type="submit"><?= $label ?></button>
     <?php
             break;
     endswitch;
     ?>
     <noscript><?= lang('Messages.enablejs'); ?></noscript>
-<?php
-endif;
+<?php else: ?>
+    <button type="submit"><?= $label ?></button>
+<?php endif; ?>
