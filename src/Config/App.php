@@ -49,7 +49,7 @@ class App extends \Config\App
 	*
 	* Enable Captcha
 	*/
-	public bool $userLibCaptcha = true;
+	public bool $userLibCaptcha = false;
 
 	/*
 	* Captcha Type
