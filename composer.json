@@ -2,7 +2,7 @@
     "name": "franky5831/codeigniter4-user-library",
     "description": "Codeigniter4 User Mangement Library",
     "type": "package",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "autoload": {
         "psr-4": {
             "Franky5831\\CodeIgniter4UserLibrary\\": "src/"
