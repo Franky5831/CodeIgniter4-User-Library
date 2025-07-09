@@ -13,7 +13,7 @@ if ($setUserLibRoutes) {
 	/**
 	 * @var RouteCollection $routes
 	 */
-	$routes->match(['get', 'post'], '/login', '\Franky5831\CodeIgniter4UserLibrary\Controllers\User::login', ["as" => "loginurl"]);
-	$routes->match(['get', 'post'], '/register', '\Franky5831\CodeIgniter4UserLibrary\Controllers\User::register', ["as" => "registerurl"]);
-	$routes->match(['get'], '/logout', '\Franky5831\CodeIgniter4UserLibrary\Controllers\User::logout', ["as" => "logouturl"]);
+	$routes->match(['GET', 'POST'], '/login', '\Franky5831\CodeIgniter4UserLibrary\Controllers\User::login', ["as" => "loginurl"]);
+	$routes->match(['GET', 'POST'], '/register', '\Franky5831\CodeIgniter4UserLibrary\Controllers\User::register', ["as" => "registerurl"]);
+	$routes->match(['GET'], '/logout', '\Franky5831\CodeIgniter4UserLibrary\Controllers\User::logout', ["as" => "logouturl"]);
 }
